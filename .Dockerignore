@@ -1,0 +1,17 @@
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+*.log
+*.mp4
+*.mp3
+*.webm
+youtube_downloads/
+instagram_downloads/
+.env
+.git
+.gitignore
+.vscode
+.idea

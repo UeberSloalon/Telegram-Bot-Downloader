@@ -1,0 +1,7 @@
+aiogram
+python-dotenv
+requests
+pytest
+pytest-asyncio
+pytest-cov
+yt-dlp
