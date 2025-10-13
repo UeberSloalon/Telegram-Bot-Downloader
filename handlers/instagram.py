@@ -18,6 +18,13 @@ def download_instagram(url: str, output_path: str) -> list[str]:
         "format": "mp4",
         "outtmpl": os.path.join(output_path, "%(id)s.%(ext)s"),
         "quiet": True,
+        "headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 (KHTML, like Gecko) "
+            "Chrome/91.0.4472.124 Safari/537.36"
+        },
+        "sleep_interval": 3,
+        "max_sleep_interval": 5,
         "noplaylist": True,
     }
     filepaths = []
