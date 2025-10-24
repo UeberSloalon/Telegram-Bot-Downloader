@@ -30,20 +30,30 @@ def download_youtube(url: str, output_path: str, format_code: str) -> str:
         "outtmpl": os.path.join(output_path, "%(title)s.%(ext)s"),
         "noplaylist": True,
         "quiet": True,
+        "no_warnings": False,
+
+        "http_headers": {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
+            "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+            "Accept-Language": "en-us,en;q=0.5",
+            "Accept-Encoding": "gzip,deflate",
+            "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
+            "Connection": "keep-alive",
+        },
+
+        "extract_flat": False,
     }
 
     if format_code == "mp3":
-        ydl_opts.update(
-            {
-                "postprocessors": [
-                    {
-                        "key": "FFmpegExtractAudio",
-                        "preferredcodec": "mp3",
-                        "preferredquality": "192",
-                    }
-                ]
-            }
-        )
+        ydl_opts.update({
+            "postprocessors": [{
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "192",
+            }],
+            "writethumbnail": True,
+            "postprocessor_args": ["-metadata", "title=%(title)s"]
+        })
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
