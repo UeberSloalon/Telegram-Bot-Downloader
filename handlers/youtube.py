@@ -4,8 +4,13 @@ import uuid
 
 import yt_dlp
 from aiogram import F, Router, types
-from aiogram.types import (CallbackQuery, FSInputFile, InlineKeyboardButton,
-                           InlineKeyboardMarkup, Message)
+from aiogram.types import (
+    CallbackQuery,
+    FSInputFile,
+    InlineKeyboardButton,
+    InlineKeyboardMarkup,
+    Message,
+)
 
 router = Router()
 
@@ -31,7 +36,6 @@ def download_youtube(url: str, output_path: str, format_code: str) -> str:
         "noplaylist": True,
         "quiet": True,
         "no_warnings": False,
-
         "http_headers": {
             "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36",
             "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
@@ -40,20 +44,23 @@ def download_youtube(url: str, output_path: str, format_code: str) -> str:
             "Accept-Charset": "ISO-8859-1,utf-8;q=0.7,*;q=0.7",
             "Connection": "keep-alive",
         },
-
         "extract_flat": False,
     }
 
     if format_code == "mp3":
-        ydl_opts.update({
-            "postprocessors": [{
-                "key": "FFmpegExtractAudio",
-                "preferredcodec": "mp3",
-                "preferredquality": "192",
-            }],
-            "writethumbnail": True,
-            "postprocessor_args": ["-metadata", "title=%(title)s"]
-        })
+        ydl_opts.update(
+            {
+                "postprocessors": [
+                    {
+                        "key": "FFmpegExtractAudio",
+                        "preferredcodec": "mp3",
+                        "preferredquality": "192",
+                    }
+                ],
+                "writethumbnail": True,
+                "postprocessor_args": ["-metadata", "title=%(title)s"],
+            }
+        )
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         info = ydl.extract_info(url, download=True)
@@ -63,9 +70,7 @@ def download_youtube(url: str, output_path: str, format_code: str) -> str:
         return filename
 
 
-@router.message(
-    F.text.regexp(r"(https?://)?(www\.)?(youtube\.com|youtu\.be)/")
-)
+@router.message(F.text.regexp(r"(https?://)?(www\.)?(youtube\.com|youtu\.be)/"))
 async def youtube_handler(message: Message):
     url = message.text.strip()
     video_id = uuid.uuid4().hex[:8]
@@ -74,17 +79,11 @@ async def youtube_handler(message: Message):
     kb = InlineKeyboardMarkup(
         inline_keyboard=[
             [
-                InlineKeyboardButton(
-                    text="360p", callback_data=f"yt:{video_id}:360p"
-                ),
-                InlineKeyboardButton(
-                    text="720p", callback_data=f"yt:{video_id}:720p"
-                ),
+                InlineKeyboardButton(text="360p", callback_data=f"yt:{video_id}:360p"),
+                InlineKeyboardButton(text="720p", callback_data=f"yt:{video_id}:720p"),
             ],
             [
-                InlineKeyboardButton(
-                    text="MP3", callback_data=f"yt:{video_id}:mp3"
-                ),
+                InlineKeyboardButton(text="MP3", callback_data=f"yt:{video_id}:mp3"),
             ],
         ]
     )

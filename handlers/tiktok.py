@@ -9,7 +9,7 @@ router = Router()
 
 
 @router.message(
-    F.text.regexp(r"(https?://)?(www\.)?(tiktok\.com|vm\.tiktok\.com)/")
+    F.text.regexp(r"(https?://)?(www\.)?(tiktok\.com|vm\.tiktok\.com|vt\.tiktok\.com)/")
 )
 async def download_tiktok(message: Message):
     url = message.text.strip()
